@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
         std::cout << "1 2 00:00:00.000" << std::endl;
 
         // run the generate function
-        for (mpz_class i = 2, n = 3; i <= mpz_class(program.get("--prime")); i++) {
+        for (mpz_class i = 2, n = 2; i <= mpz_class(program.get("--prime")); i++) {
 
             // get the prime number
             n = Sieve::nextPrime(n);
