@@ -8,7 +8,7 @@ int main(int argc, char** argv) {
 
     // add options to the parser
     program.add_argument("-h").help("Display this help message and exit.").default_value(false).implicit_value(true);
-    program.add_argument("--timer").help("Display this help message and exit.").default_value(false).implicit_value(true);
+    program.add_argument("--timer").help("Prints the elapsed time at the end of calculation.").default_value(false).implicit_value(true);
     program.add_argument("--prime").help("Generates first n prime numbers.");
     program.add_argument("--mersenne").help("Generates first n Mersenne prime numbers.");
     program.add_argument("--isprime").help("Check if the given number is a prime.");
