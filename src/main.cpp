@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
         bool prime = Sieve::isMersenne(mpz_class(program.get("--ismersenne").c_str(), 10));
 
         // print the result
-        std::cout << "The number " << program.get("--ismersenne") << " is " << (prime ? "" : "not ") << "a Mersenne prime." << std::endl;
+        std::cout << "The number 2^" << program.get("--ismersenne") << "-1 is " << (prime ? "" : "not ") << "a Mersenne prime." << std::endl;
     }
 
     // print the total time if requested
