@@ -17,21 +17,18 @@ if(WIN32)
     string(APPEND CMAKE_CXX_FLAGS_DEBUG " -static")
 endif()
 
-# git clone some libraries
-FetchContent_Declare(argparse SYSTEM GIT_REPOSITORY https://github.com/p-ranav/argparse.git GIT_TAG v2.9)
-
-# fetch the dependencies
-FetchContent_MakeAvailable(argparse)
+# include necessary directories
+include_directories(include lib)
 
 # find the necessary packages
 find_package(OpenMP)
 
 # define the source files
-set(PRIMAL src/sieve.cpp src/timer.cpp)
+set(PRIMAL )
 
 # add fractoid executable
-add_executable(primal primal.cpp ${PRIMAL})
-target_link_libraries(primal argparse gmp gmpxx)
+add_executable(primal src/main.cpp src/sieve.cpp src/timer.cpp)
+target_link_libraries(primal gmp gmpxx)
 
 # link OpenMP on build type
 if(OPENMP_FOUND AND ${CMAKE_BUILD_TYPE} STREQUAL Release)
