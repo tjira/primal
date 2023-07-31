@@ -16,8 +16,6 @@ if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
     set(CXXFLAGS ${CMAKE_CXX_FLAGS_DEBUG})
 elseif(${CMAKE_BUILD_TYPE} STREQUAL Release)
     set(CXXFLAGS ${CMAKE_CXX_FLAGS_RELEASE})
-else()
-    set(CXXFLAGS "You compiled the program wrong. Please specify during makefile creation 'Debug' or 'Release' build type.")
 endif()
 
 # static link if on Windows
@@ -35,11 +33,8 @@ FetchContent_MakeAvailable(argparse)
 # find the necessary packages
 find_package(OpenMP)
 
-# define the source files
-set(PRIMAL src/sieve.cpp src/timer.cpp)
-
-# add fractoid executable
-add_executable(primal primal.cpp ${PRIMAL})
+# add primal executable
+add_executable(primal src/main.cpp src/sieve.cpp src/timer.cpp)
 target_compile_definitions(primal PRIVATE CXXFLAGS="${CXXFLAGS}")
 target_link_libraries(primal argparse gmp gmpxx)
 

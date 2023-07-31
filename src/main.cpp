@@ -1,5 +1,5 @@
-#include "include/sieve.h"
-#include "include/timer.h"
+#include "../include/sieve.h"
+#include "../include/timer.h"
 #include <argparse/argparse.hpp>
 
 int main(int argc, char** argv) {
