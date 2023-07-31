@@ -1,4 +1,4 @@
-#include "../include/sieve.h"
+#include "sieve.h"
 
 bool Sieve::isMersenne(mpz_class p) {
     mpz_class M = (mpz_class(2) << p.get_ui() - 1) - 1, s = 4;
