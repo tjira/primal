@@ -9,11 +9,12 @@ bool Sieve::isMersenne(mpz_class p) {
 }
 
 bool Sieve::isPrime(mpz_class n) {
-    if (n % 2 == 0) return false;
-    for (mpz_class i = 3; i * i <= n; i += 2) {
-        if (n % i == 0) return false;
-    }
-    return true;
+    if (n % 2 == 1) {
+        for (mpz_class i = 3; i * i <= n; i += 2) {
+            if (n % i == 0) return false;
+        }
+	return n > 2;
+    } else return n == 2;
 }
 
 mpz_class Sieve::nextMersenne(mpz_class p) {

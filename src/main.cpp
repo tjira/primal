@@ -8,11 +8,11 @@ int main(int argc, char** argv) {
 
     // add options to the parser
     program.add_argument("-h", "--help").help("Display this help message and exit.").default_value(false).implicit_value(true);
-    program.add_argument("--timer").help("Prints the elapsed time at the end of calculation.").default_value(false).implicit_value(true);
-    program.add_argument("--prime").help("Generates first n prime numbers.");
-    program.add_argument("--mersenne").help("Generates first n Mersenne prime numbers.");
-    program.add_argument("--isprime").help("Check if the given number is a prime.");
     program.add_argument("--ismersenne").help("Check if the given number is a Mersenne prime.");
+    program.add_argument("--isprime").help("Check if the given number is a prime.");
+    program.add_argument("--mersenne").help("Generates first n Mersenne prime numbers.");
+    program.add_argument("--prime").help("Generates first n prime numbers.");
+    program.add_argument("--timer").help("Prints the elapsed time at the end of calculation.").default_value(false).implicit_value(true);
 
     // extract the variables from the command line
     try {
@@ -29,55 +29,28 @@ int main(int argc, char** argv) {
     // start the timer
     auto timestamp = Timer::now();
 
-    // if generate calculation specified
+    // prime generation
     if (program.is_used("--prime")) {
-
-        // print the first prime
-        std::cout << "1 2 00:00:00.000" << std::endl;
-
-        // run the generate function
-        for (mpz_class i = 2, n = 2; i <= mpz_class(program.get("--prime")); i++) {
-
-            // get the prime number
-            n = Sieve::nextPrime(n);
-
-            // print the prime number
+        for (mpz_class i = 1, n = 2; i <= mpz_class(program.get("--prime")); i++, n = Sieve::nextPrime(n)) {
             std::cout << i.get_str() << " " << n.get_str() << " " << Timer::format(Timer::elapsed(timestamp)) << std::endl;
         }
+    }
 
-    // if Mersenne primes requested
-    } else if (program.is_used("--mersenne")) {
-
-        // print the first Mersenne prime
-        std::cout << "1 2 00:00:00.000" << std::endl;
-
-        // run the generate function
-        for (mpz_class i = 2, p = 2; i <= mpz_class(program.get("--mersenne")); i++) {
-
-            // get the next mersenne prime
-            p = Sieve::nextMersenne(p);
-
-            // print the prime
+    // mersenne prime generation
+    else if (program.is_used("--mersenne")) {
+        for (mpz_class i = 1, p = 2; i <= mpz_class(program.get("--mersenne")); i++, p = Sieve::nextMersenne(p)) {
             std::cout << i.get_str() << " " << p.get_str() << " " << Timer::format(Timer::elapsed(timestamp)) << std::endl;
         }
+    }
 
-    // if prime check calculation specified
-    } else if (program.is_used("--isprime")) {
+    // prime check calculation
+    else if (mpz_class n = program.is_used("--isprime") ? mpz_class(program.get("--isprime")) : 0; program.is_used("--isprime")) {
+        std::cout << "The number " << program.get("--isprime") << " is " << (Sieve::isPrime(n) ? "" : "not ") << "a prime." << std::endl;
+    }
 
-        // check for primality
-        bool prime = Sieve::isPrime(mpz_class(program.get("--isprime").c_str(), 10));
-
-        // print the result
-        std::cout << "The number " << program.get("--isprime") << " is " << (prime ? "" : "not ") << "a prime." << std::endl;
-
-    // if mersenne check requested
-    } else if (program.is_used("--ismersenne")) {
-
-        // check if Mersenne prime
-        bool prime = Sieve::isMersenne(mpz_class(program.get("--ismersenne").c_str(), 10));
-
-        // print the result
-        std::cout << "The number 2^" << program.get("--ismersenne") << "-1 is " << (prime ? "" : "not ") << "a Mersenne prime." << std::endl;
+    // mersenne prime check calculation
+    else if (mpz_class n = program.is_used("--ismersenne") ? mpz_class(program.get("--ismersenne")) : 0; program.is_used("--ismersenne")) {
+        std::cout << "The number 2^" << program.get("--ismersenne") << "-1 is " << (Sieve::isMersenne(n) ? "" : "not ") << "a Mersenne prime." << std::endl;
     }
 
     // print the total time if requested
