@@ -12,7 +12,27 @@ env:
   BUILD_TYPE: Release
 
 jobs:
-  build-linux:
+  build_linux_x86-64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure Primal
+        run: cmake -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+      - name: Build Primal
+        run: cmake --build build --parallel 2
+
+      - name: Rename Executable
+        run: mv bin/primal bin/primal_linux_x86-64
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          path: bin/primal_linux_x86-64
+
+  build_linux_x86-64_openmp:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,16 +42,19 @@ jobs:
         run: cmake -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DGOMP=ON
 
       - name: Build Primal
-        run: cmake --build build
+        run: cmake --build build --parallel 2
+
+      - name: Rename Executable
+        run: mv bin/primal bin/primal_linux_x86-64_openmp
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          path: bin/primal
+          path: bin/primal_linux_x86-64_openmp
 
   release:
     runs-on: ubuntu-latest
-    needs: [build-linux]
+    needs: [build_linux_x86-64, build_linux_x86-64_openmp]
 
     steps:
       - uses: actions/checkout@v3
@@ -39,12 +62,32 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v3
 
-      - name: Move Executables
-        run: cp artifact/primal ${{github.workspace}}
+      - name: Copy x86-64 Binaries to the Root Folder
+        run: |
+          cp artifact/primal_linux_x86-64 primal
 
-      - name: Release Linux Primal
+      - name: Create x86-64 Packages
+        run: |
+          tar -czf primal_linux_x86-64.tar.gz primal LICENSE.md
+
+      - name: Copy x86-64_openmp Binaries to the Root Folder
+        run: |
+          cp artifact/primal_linux_x86-64_openmp primal
+
+      - name: Create x86-64_openmp Packages
+        run: |
+          tar -czf primal_linux_x86-64_openmp.tar.gz primal LICENSE.md
+
+      - name: Release linux_x86-64 Version of Primal
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{secrets.GITHUB_TOKEN}}
+          file: primal_linux_x86-64.tar.gz
           tag: ${{github.ref}}
-          file: primal
+
+      - name: Release linux_x86-64_openmp Version of Primal
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{secrets.GITHUB_TOKEN}}
+          file: primal_linux_x86-64_openmp.tar.gz
+          tag: ${{github.ref}}
