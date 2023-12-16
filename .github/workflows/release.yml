@@ -18,10 +18,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Configure primal
-        run: cmake -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: Configure Primal
+        run: cmake -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DGOMP=ON
 
-      - name: Build primal
+      - name: Build Primal
         run: cmake --build build
 
       - name: Upload Artifacts

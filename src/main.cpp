@@ -10,8 +10,10 @@ int main(int argc, char** argv) {
     program.add_argument("-h", "--help").help("Display this help message and exit.").default_value(false).implicit_value(true);
     program.add_argument("--ismersenne").help("Check if the given number is a Mersenne prime.");
     program.add_argument("--isprime").help("Check if the given number is a prime.");
-    program.add_argument("--mersenne").help("Generates first n Mersenne prime numbers.");
-    program.add_argument("--prime").help("Generates first n prime numbers.");
+    program.add_argument("--mersenne").help("Generates nth Mersenne prime number.").default_value("1");
+    program.add_argument("--mersennes").help("Generates first n Mersenne prime numbers.").default_value("1");
+    program.add_argument("--prime").help("Generates nth prime number.").default_value("1");
+    program.add_argument("--primes").help("Generates first n prime numbers.").default_value("1");
     program.add_argument("--timer").help("Prints the elapsed time at the end of the calculation.").default_value(false).implicit_value(true);
 
     // check if some arguments were privided
@@ -33,15 +35,24 @@ int main(int argc, char** argv) {
     auto timestamp = Timer::now();
 
     // prime generation
-    if (program.is_used("--prime")) {
-        for (mpz_class i = 1, n = 2; i <= mpz_class(program.get("--prime")); i++, n = Sieve::nextPrime(n)) {
+    if (auto lim = mpz_class(program.get("--prime")); program.is_used("--prime")) {
+        for (mpz_class i = 1, n = 1; i <= lim && (n = Sieve::nextPrime(n)); i++) {
+            if (i == lim) std::cout << i.get_str() << " " << n.get_str() << " " << Timer::format(Timer::elapsed(timestamp)) << std::endl;
+        }
+    } else if (auto lim = mpz_class(program.get("--primes")); program.is_used("--primes")) {
+        for (mpz_class i = 1, n = 1; i <= lim && (n = Sieve::nextPrime(n)); i++) {
             std::cout << i.get_str() << " " << n.get_str() << " " << Timer::format(Timer::elapsed(timestamp)) << std::endl;
         }
     }
 
     // mersenne prime generation
-    else if (program.is_used("--mersenne")) {
-        for (mpz_class i = 1, p = 2; i <= mpz_class(program.get("--mersenne")); i++, p = Sieve::nextMersenne(p)) {
+    else if (auto lim = mpz_class(program.get("--mersenne")); program.is_used("--mersenne")) {
+        for (mpz_class i = 1, p = 1; i <= lim && (p = Sieve::nextMersenne(p)); i++) {
+            if (i == lim) std::cout << i.get_str() << " " << p.get_str() << " " << Timer::format(Timer::elapsed(timestamp)) << std::endl;
+        }
+    }
+    else if (auto lim = mpz_class(program.get("--mersennes")); program.is_used("--mersennes")) {
+        for (mpz_class i = 1, p = 1; i <= lim && (p = Sieve::nextMersenne(p)); i++) {
             std::cout << i.get_str() << " " << p.get_str() << " " << Timer::format(Timer::elapsed(timestamp)) << std::endl;
         }
     }

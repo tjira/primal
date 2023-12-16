@@ -5,7 +5,7 @@ bool Sieve::isMersenne(mpz_class p) {
     for (mpz_class i = 0; i < p - 2; i++) {
         s = (s * s - 2) % M;
     }
-    return s == 0;
+    return s == 0 || p == 2;
 }
 
 bool Sieve::isPrime(mpz_class n) {
@@ -22,6 +22,6 @@ mpz_class Sieve::nextMersenne(mpz_class p) {
 }
 
 mpz_class Sieve::nextPrime(mpz_class n) {
-    for (n += n % mpz_class(2) + 1; !isPrime(n); n += 2) {} return n;
+    for (n += n < 2 ? 2 - n : mpz_class(n % 2 + 1); !isPrime(n); n += 2) {} return n;
 }
 

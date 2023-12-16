@@ -1,4 +1,4 @@
-<h1 align="center">primal</h1>
+<h1 align="center">Primal</h1>
 
 <p align="center">
     <a href="https://github.com/tjira/primal/pulse">
