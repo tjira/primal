@@ -14,6 +14,9 @@ int main(int argc, char** argv) {
     program.add_argument("--prime").help("Generates first n prime numbers.");
     program.add_argument("--timer").help("Prints the elapsed time at the end of the calculation.").default_value(false).implicit_value(true);
 
+    // check if some arguments were privided
+    if (argc == 1) throw std::runtime_error("YOU HAVE TO PROVIDE SOME ARGUMENTS");
+
     // extract the variables from the command line
     try {
         program.parse_args(argc, argv);

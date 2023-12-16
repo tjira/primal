@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # set compiler flags
 set(CMAKE_CXX_FLAGS_DEBUG "-g -pg -O0 -fprofile-arcs -ftest-coverage -Wall -Wextra")
-set(CMAKE_CXX_FLAGS_RELEASE "-s -O3")
+set(CMAKE_CXX_FLAGS_RELEASE "-s -mavx -O3")
 
 # set the variable that contains the compile flags
 if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
