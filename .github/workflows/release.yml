@@ -64,6 +64,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install Packages
+        run: choco install boost-msvc-14.1
+
       - name: Configure Primal
         run: cmake -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
