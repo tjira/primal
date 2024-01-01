@@ -102,7 +102,7 @@ jobs:
 
       - name: Create x86-64 Packages
         run: |
-          zip -r primal_windows_x86-64.zip suprimal.exe LICENSE.md
+          zip -r primal_windows_x86-64.zip primal.exe LICENSE.md
           tar -czf primal_linux_x86-64.tar.gz primal LICENSE.md
 
       - name: Copy x86-64_openmp Binaries to the Root Folder
@@ -124,7 +124,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{secrets.GITHUB_TOKEN}}
-          file: primal_Windows_x86-64.tar.gz
+          file: primal_windows_x86-64.tar.gz
           tag: ${{github.ref}}
 
       - name: Release linux_x86-64_openmp Version of Primal
