@@ -1,12 +1,13 @@
 #pragma once
 
-#include <gmpxx.h>
-#include <vector>
+#include <boost/multiprecision/cpp_int.hpp>
+
+using namespace boost::multiprecision;
 
 class Sieve {
 public:
-    static mpz_class nextPrime(mpz_class n);
-    static bool isMersenne(mpz_class p);
-    static mpz_class nextMersenne(mpz_class p);
-    static bool isPrime(mpz_class n);
+    static cpp_int nextPrime(cpp_int n);
+    static bool isMersenne(cpp_int p);
+    static cpp_int nextMersenne(cpp_int p);
+    static bool isPrime(cpp_int n);
 };

@@ -17,6 +17,9 @@ FetchContent_Declare(argparse SYSTEM GIT_REPOSITORY https://github.com/p-ranav/a
 # fetch the libraries
 FetchContent_MakeAvailable(argparse)
 
+# find boost
+find_package(Boost REQUIRED)
+
 # set the variable that contains the compile flags
 if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
     set(CXXFLAGS ${CMAKE_CXX_FLAGS_DEBUG})
@@ -24,7 +27,7 @@ elseif(${CMAKE_BUILD_TYPE} STREQUAL Release)
     set(CXXFLAGS ${CMAKE_CXX_FLAGS_RELEASE})
 endif()
 
-# include directories (the second include is there because of boost/preprocessor.hpp)
+# include directories
 include_directories(include ${argparse_SOURCE_DIR}/include/argparse)
 
 # find OpenMP if enabled
@@ -34,8 +37,8 @@ endif()
 unset(GOMP CACHE)
 
 # add fractoid executable
-add_executable(primal src/main.cpp src/sieve.cpp src/timer.cpp)
-target_link_libraries(primal gmp gmpxx)
+add_executable(primal src/main.cpp src/pi.cpp src/sieve.cpp src/timer.cpp)
+target_link_libraries(primal Boost::boost)
 
 # link OpenMP on build type
 if(OPENMP_FOUND AND ${CMAKE_BUILD_TYPE} STREQUAL Release)
