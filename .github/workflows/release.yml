@@ -64,11 +64,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-        - name: Install Boost
-          uses: MarkusJx/install-boost@v2.4.4
-          id: boost
-          with:
-              boost_version: 1.73.0
+      - name: Install Boost
+        uses: MarkusJx/install-boost@v2.4.4
+        id: boost
+        with:
+            boost_version: 1.73.0
 
       - name: Configure Primal
         run: cmake -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
