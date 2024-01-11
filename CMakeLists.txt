@@ -9,7 +9,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # set compiler flags
 set(CMAKE_CXX_FLAGS_DEBUG "-g -pg -O0 -fprofile-arcs -ftest-coverage -Wall -Wextra")
-set(CMAKE_CXX_FLAGS_RELEASE "-s -mavx -O3")
+set(CMAKE_CXX_FLAGS_RELEASE "-s -O3")
+
+# disable AVX if requested
+if (NOT DEFINED NOAVX OR NOT ${NOAVX})
+    string(APPEND CMAKE_CXX_FLAGS_RELEASE " -mavx")
+endif()
+unset(NOAVX CACHE)
 
 # static link on windows
 if (WIN32)
