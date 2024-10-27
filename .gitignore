@@ -1,7 +1,5 @@
-compile_commands.json
-CTestTestfile.cmake
-profile.txt
-gmon.out
+# folders
+external/
 .cache/
 build/
 bin/

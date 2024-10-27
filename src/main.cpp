@@ -1,7 +1,7 @@
+#include <argparse.hpp>
 #include "pi.h"
 #include "sieve.h"
 #include "timer.h"
-#include "argparse.hpp"
 
 int main(int argc, char** argv) {
     // initialize the argument parser and container for the arguments
@@ -37,45 +37,45 @@ int main(int argc, char** argv) {
     auto timestamp = Timer::now();
 
     // pi generation
-    if (auto lim = cpp_int(program.get("--pidigit")); program.is_used("--pidigit")) {
-        Gospers pi; for (cpp_int i = 1, n = 1; i <= lim && ((n = pi.next()) || true); i++) {
-            if (i == lim) std::printf("%s %s %s\n", i.str().c_str(), n.str().c_str(), Timer::format(Timer::elapsed(timestamp)).c_str());
+    if (auto lim = mpz_class(program.get("--pidigit")); program.is_used("--pidigit")) {
+        Gospers pi; for (mpz_class i = 1, n = 1; i <= lim && ((n = pi.next()) || true); i++) {
+            if (i == lim) std::printf("%s %s %s\n", i.get_str().c_str(), n.get_str().c_str(), Timer::format(Timer::elapsed(timestamp)).c_str());
         }
-    } else if (auto lim = cpp_int(program.get("--pidigits")); program.is_used("--pidigits")) {
-        Gospers pi; for (cpp_int i = 1, n = 1; i <= lim && ((n = pi.next()) || true); i++) {
-            std::printf("%s %s %s\n", i.str().c_str(), n.str().c_str(), Timer::format(Timer::elapsed(timestamp)).c_str());
+    } else if (auto lim = mpz_class(program.get("--pidigits")); program.is_used("--pidigits")) {
+        Gospers pi; for (mpz_class i = 1, n = 1; i <= lim && ((n = pi.next()) || true); i++) {
+            std::printf("%s %s %s\n", i.get_str().c_str(), n.get_str().c_str(), Timer::format(Timer::elapsed(timestamp)).c_str());
         }
     }
 
     // prime generation
-    else if (auto lim = cpp_int(program.get("--prime")); program.is_used("--prime")) {
-        for (cpp_int i = 1, n = 1; i <= lim && (n = Sieve::nextPrime(n)); i++) {
-            if (i == lim) std::printf("%s %s %s\n", i.str().c_str(), n.str().c_str(), Timer::format(Timer::elapsed(timestamp)).c_str());
+    else if (auto lim = mpz_class(program.get("--prime")); program.is_used("--prime")) {
+        for (mpz_class i = 1, n = 1; i <= lim && (n = Sieve::nextPrime(n)); i++) {
+            if (i == lim) std::printf("%s %s %s\n", i.get_str().c_str(), n.get_str().c_str(), Timer::format(Timer::elapsed(timestamp)).c_str());
         }
-    } else if (auto lim = cpp_int(program.get("--primes")); program.is_used("--primes")) {
-        for (cpp_int i = 1, n = 1; i <= lim && (n = Sieve::nextPrime(n)); i++) {
-            std::printf("%s %s %s\n", i.str().c_str(), n.str().c_str(), Timer::format(Timer::elapsed(timestamp)).c_str());
+    } else if (auto lim = mpz_class(program.get("--primes")); program.is_used("--primes")) {
+        for (mpz_class i = 1, n = 1; i <= lim && (n = Sieve::nextPrime(n)); i++) {
+            std::printf("%s %s %s\n", i.get_str().c_str(), n.get_str().c_str(), Timer::format(Timer::elapsed(timestamp)).c_str());
         }
     }
 
     // mersenne prime generation
-    else if (auto lim = cpp_int(program.get("--mersenne")); program.is_used("--mersenne")) {
-        for (cpp_int i = 1, p = 1; i <= lim && (p = Sieve::nextMersenne(p)); i++) {
-            if (i == lim) std::printf("%s %s %s\n", i.str().c_str(), p.str().c_str(), Timer::format(Timer::elapsed(timestamp)).c_str());
+    else if (auto lim = mpz_class(program.get("--mersenne")); program.is_used("--mersenne")) {
+        for (mpz_class i = 1, p = 1; i <= lim && (p = Sieve::nextMersenne(p)); i++) {
+            if (i == lim) std::printf("%s %s %s\n", i.get_str().c_str(), p.get_str().c_str(), Timer::format(Timer::elapsed(timestamp)).c_str());
         }
-    } else if (auto lim = cpp_int(program.get("--mersennes")); program.is_used("--mersennes")) {
-        for (cpp_int i = 1, p = 1; i <= lim && (p = Sieve::nextMersenne(p)); i++) {
-            std::printf("%s %s %s\n", i.str().c_str(), p.str().c_str(), Timer::format(Timer::elapsed(timestamp)).c_str());
+    } else if (auto lim = mpz_class(program.get("--mersennes")); program.is_used("--mersennes")) {
+        for (mpz_class i = 1, p = 1; i <= lim && (p = Sieve::nextMersenne(p)); i++) {
+            std::printf("%s %s %s\n", i.get_str().c_str(), p.get_str().c_str(), Timer::format(Timer::elapsed(timestamp)).c_str());
         }
     }
 
     // prime check calculation
-    else if (cpp_int n = program.is_used("--isprime") ? cpp_int(program.get("--isprime")) : 0; program.is_used("--isprime")) {
+    else if (mpz_class n = program.is_used("--isprime") ? mpz_class(program.get("--isprime")) : 0; program.is_used("--isprime")) {
         std::printf("%s %s\n", Sieve::isPrime(n) ? "True" : "False", Timer::format(Timer::elapsed(timestamp)).c_str());
     }
 
     // mersenne prime check calculation
-    else if (cpp_int n = program.is_used("--ismersenne") ? cpp_int(program.get("--ismersenne")) : 0; program.is_used("--ismersenne")) {
+    else if (mpz_class n = program.is_used("--ismersenne") ? mpz_class(program.get("--ismersenne")) : 0; program.is_used("--ismersenne")) {
         std::printf("%s %s\n", Sieve::isMersenne(n) ? "True" : "False", Timer::format(Timer::elapsed(timestamp)).c_str());
     }
 }

@@ -4,42 +4,46 @@ cmake_minimum_required(VERSION 3.18)
 # project name
 project(Primal)
 
-# include plugins
-include(FetchContent)
-
-# set cmake flags
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# set the c++ standard
 set(CMAKE_CXX_STANDARD 20)
 
-# set compiler flags
-set(CMAKE_CXX_FLAGS_DEBUG "-g -pg -O0 -Wall -Wextra")
-set(CMAKE_CXX_FLAGS_RELEASE "-mavx -s -O3")
+# set policies and compile commands
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# static link on windows
-if (WIN32)
-    string(APPEND CMAKE_CXX_FLAGS_RELEASE " -static")
-    string(APPEND CMAKE_CXX_FLAGS_DEBUG " -static")
+# set output path
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
+
+# set the debug and release compiler flags
+set(CMAKE_CXX_FLAGS_DEBUG "-g -pg -Og -Wall -Wextra -Wl,-rpath,'$ORIGIN' --coverage")
+set(CMAKE_CXX_FLAGS_RELEASE "-s -O3 -flto=auto -march=native -Wl,-rpath,'$ORIGIN'")
+
+# set static flags
+if(STATIC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
 endif()
 
-# declare libraries
-FetchContent_Declare(argparse SYSTEM GIT_REPOSITORY https://github.com/p-ranav/argparse.git GIT_TAG ac4c578f6020d5164f66ccb26b4727dea657a12b)
-
-# fetch the libraries
-FetchContent_MakeAvailable(argparse)
-
-# find packages
-find_package(OpenMP REQUIRED)
-find_package(Boost REQUIRED)
-
 # include directories
-include_directories(include ${argparse_SOURCE_DIR}/include/argparse)
+include_directories(include external/include)
+
+# find custom packages
+find_library(LIBGMPXX NAMES gmpxx PATHS external/lib NO_DEFAULT_PATH)
+find_library(LIBGMP NAMES gmp PATHS external/lib NO_DEFAULT_PATH)
+
+# find system packages
+find_package(OpenMP REQUIRED)
 
 # add fractoid executable
-add_executable(primal src/main.cpp src/pi.cpp src/sieve.cpp src/timer.cpp)
-target_link_libraries(primal Boost::boost)
+add_executable(primal
+    src/main.cpp
+    src/pi.cpp
+    src/sieve.cpp
+    src/timer.cpp
+)
 
-# link OpenMP on build type
-if(CMAKE_BUILD_TYPE STREQUAL Release)
+# link the libraries
+target_link_libraries(primal ${LIBGMP} ${LIBGMPXX})
+
+# link OpenMP
+if(OpenMP_CXX_FOUND)
     target_link_libraries(primal OpenMP::OpenMP_CXX)
 endif()

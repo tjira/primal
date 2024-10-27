@@ -1,11 +1,12 @@
 #include "pi.h"
 
-cpp_int Gospers::next() {
+mpz_class Gospers::next() {
     // initialize n
     n = (q * (27 * i - 12) + 5 * r) / (5 * t);
 
     // do the loop
     while(n != (q * (675 * i - 216) + 125 * r) / (125 * t)) {
+
         // calculate r
         r = 3 * (3 * i + 1) * (3 * i + 2) * ((5 * i - 2) * q + r);
 
